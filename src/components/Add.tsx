@@ -13,6 +13,7 @@ interface Props {
 export default function Add({ setNotification, secrets, setSecrets, selectedFolder }: Props) {
     const [name, setName] = useState("");
     const [otpSecret, setOtpSecret] = useState("");
+    const [isVisible, setIsVisible] = useState(false);
 
     const addSecret = async () => {
         if (!name || !otpSecret) {
@@ -42,6 +43,7 @@ export default function Add({ setNotification, secrets, setSecrets, selectedFold
             setSecrets(newSecrets);
             setName('');
             setOtpSecret('');
+            setIsVisible(false);
             setNotification({
                 message: 'Secret added successfully',
                 type: 'success'
@@ -55,39 +57,48 @@ export default function Add({ setNotification, secrets, setSecrets, selectedFold
     };
 
     return (
-        <div className={styles["add-item"]}>
-            <input
-                type="text"
-                className={styles["input"]}
-                placeholder="Enter Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
+        <div className={styles["add-container"]}>
+            <button
+                className={`${styles["toggle-button"]} ${isVisible ? styles["toggle-button-active"] : styles["toggle-button-inactive"]}`}
+                onClick={() => setIsVisible(!isVisible)}
+            >
+                {isVisible ? '− Hide' : '+ Add Key'}
+            </button>
 
-            <input
-                type="text"
-                className={styles["input"]}
-                placeholder="Enter OTP Secret"
-                value={otpSecret}
-                onChange={(e) => setOtpSecret(e.target.value)}
-            />
+            {isVisible && (
+                <div className={styles["add-item"]}>
+                    <input
+                        type="text"
+                        className={styles["input"]}
+                        placeholder="Enter Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
 
-            <div className={styles["button-container"]}>
-                <button
-                    className={styles["add-key-button"]}
-                    onClick={addSecret}
+                    <input
+                        type="text"
+                        className={styles["input"]}
+                        placeholder="Enter OTP Secret"
+                        value={otpSecret}
+                        onChange={(e) => setOtpSecret(e.target.value)}
+                    />
 
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.02)';
-                    }}
-
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                    }}
-                >
-                    Add Key
-                </button>
-            </div>
+                    <div className={styles["button-container"]}>
+                        <button
+                            className={styles["add-key-button"]}
+                            onClick={addSecret}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'scale(1.02)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                        >
+                            Add Key
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

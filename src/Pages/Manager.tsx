@@ -137,7 +137,15 @@ export default function Manager({ setShowPassword }: ManagerProps) {
             )}
 
             <div className={styles["folders-bar"]}>
-                <div className={styles["folders-list"]}>
+                <div
+                    className={styles["folders-list"]}
+                    onWheel={(e) => {
+                        if (e.deltaY !== 0) {
+                            e.preventDefault();
+                            e.currentTarget.scrollLeft += e.deltaY;
+                        }
+                    }}
+                >
                     {folders.map(folder => (
                         <button
                             key={folder}
@@ -149,34 +157,19 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                         </button>
                     ))}
                 </div>
-                <div className={styles["new-folder-compact"]} style={{
-                    display: 'flex',
-                    gap: '0.5rem'
-                }}>
-                    <input
-                        type="text"
-                        className={styles["folder-input"]}
-                        placeholder="New Folder"
-                        value={newFolder}
-                        onChange={(e) => setNewFolder(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && addFolder()}
-                    />
-                    <button
-                        onClick={addFolder}
-                        style={{
-                            padding: '0.6rem 1rem',
-                            border: 'none',
-                            borderRadius: '12px',
-                            background: 'linear-gradient(45deg, #5352ed, #3742fa)',
-                            color: 'white',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                            fontSize: '1.1rem',
-                            boxShadow: '0 4px 15px rgba(55, 66, 250, 0.3)'
-                        }}
-                    >
-                        +
-                    </button>
+                <div className={styles["folder-controls"]}>
+                    <Add setNotification={setNotification} secrets={secrets} setSecrets={setSecrets} selectedFolder={selectedFolder} />
+                    <div className={styles["new-folder-compact"]}>
+                        <input
+                            type="text"
+                            className={styles["folder-input"]}
+                            placeholder="New Folder"
+                            value={newFolder}
+                            onChange={(e) => setNewFolder(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && addFolder()}
+                        />
+                        <button onClick={addFolder}>+</button>
+                    </div>
                 </div>
             </div>
 
@@ -200,7 +193,6 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                     </p>
                 ) : (
                     <>
-                        <Add setNotification={setNotification} secrets={secrets} setSecrets={setSecrets} selectedFolder={selectedFolder} />
                         {filteredSecrets.map((secret) => (
                             <Secret
                                 key={secret.name}

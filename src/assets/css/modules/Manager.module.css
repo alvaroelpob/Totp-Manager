@@ -4,8 +4,8 @@
     background: linear-gradient(135deg, #1a1b26 0%, #24283b 100%);
     display: flex;
     flex-direction: column;
-    padding: clamp(1rem, 3vw, 2rem);
-    gap: clamp(1rem, 3vw, 2rem);
+    padding: clamp(0.1rem, 3vw, 2rem);
+    gap: clamp(0.5rem, 3vw, 2rem);
 }
 
 .logout-container {
@@ -13,7 +13,6 @@
     top: clamp(0.5rem, 2vw, 1rem);
     right: clamp(0.5rem, 2vw, 1rem);
 }
-
 
 .button-container {
     display: flex;
@@ -137,21 +136,6 @@
     white-space: nowrap;
 }
 
-.new-folder button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: 0.5s;
-}
-
-.new-folder button:hover::before {
-    left: 100%;
-}
-
 .new-folder button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(122, 162, 247, 0.3);
@@ -177,10 +161,9 @@ select.input option {
 
 .folders-bar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
+    flex-direction: column;
     gap: 1rem;
+    padding: 1rem;
     background: linear-gradient(145deg, #2B2B3E, #1E1E2D);
     backdrop-filter: blur(10px);
     border-radius: 15px;
@@ -196,7 +179,6 @@ select.input option {
     gap: 0.5rem;
     overflow-x: auto;
     padding-bottom: 4px;
-    flex: 1;
     white-space: nowrap;
     scrollbar-width: thin;
     scrollbar-color: #414868 transparent;
@@ -226,6 +208,7 @@ select.input option {
 }
 
 .folder-button {
+    border: none;
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 20px;
@@ -291,6 +274,14 @@ select.input option {
 
 .new-folder-compact button:hover {
     background: #6891e9;
+}
+
+.folder-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 768px) {
