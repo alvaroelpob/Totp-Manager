@@ -1,7 +1,6 @@
 html,
 body,
 #root {
-    background-color: #040406;
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -11,6 +10,11 @@ body,
     display: flex;
     justify-content: center;
     overflow-y: auto;
+    background-size: 50px 50px;
+    background-color: #080b14;
+    background-image: linear-gradient(to right, rgba(30, 41, 59, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 41, 59, 0.05) 1px, transparent 1px);
+
 }
 
 ::-webkit-scrollbar {
@@ -25,11 +29,4 @@ input::-ms-clear {
 
 * {
     box-sizing: border-box;
-}
-
-h1 {
-    text-align: center;
-    color: #4CAF50;
-    margin-top: 40px;
-    margin-bottom: 10px;
 }

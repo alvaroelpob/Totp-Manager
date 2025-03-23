@@ -113,63 +113,50 @@ export default function Manager({ setShowPassword }: ManagerProps) {
 
     const filteredSecrets = selectedFolder === 'All secrets' ? secrets : secrets.filter(secret => secret.folder === selectedFolder);
 
-    const logout = () => {
-        storage.setPassword(null);
-        setShowPassword(true);
-    };
+    // const logout = () => {
+    //     storage.setPassword(null);
+    //     setShowPassword(true);
+    // };
 
     return (
-        <div className={styles.container} onContextMenu={(e) => handleContextMenu(e, selectedFolder)}>
-            <Settings
-                secrets={secrets}
-                setSecrets={setSecrets}
-                setFolders={setFolders}
-                setNotification={setNotification}
-                onLogout={logout}
-            />
 
-            {notification && (
-                <Notification
-                    message={notification.message}
-                    type={notification.type}
-                    onClose={() => setNotification(null)}
-                />
-            )}
+        <div className={styles.container} onContextMenu={(e) => handleContextMenu(e, selectedFolder)}>
+            <div className={styles["header-content"]}>
+                <div className={styles["logo"]} data-text="TOTP Manager">
+                    TOTP Manager
+                </div>
+                <button className={styles["add-button"]}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    ADD TOTP
+                </button>
+            </div>
+
+            {
+                notification && (
+                    <Notification
+                        message={notification.message}
+                        type={notification.type}
+                        onClose={() => setNotification(null)}
+                    />
+                )
+            }
 
             <div className={styles["folders-bar"]}>
-                <div
-                    className={styles["folders-list"]}
-                    onWheel={(e) => {
-                        if (e.deltaY !== 0) {
-                            e.preventDefault();
-                            e.currentTarget.scrollLeft += e.deltaY;
-                        }
-                    }}
-                >
+                <div className={styles["folder-nav"]}>
                     {folders.map(folder => (
-                        <button
+                        <div
                             key={folder}
-                            className={`${styles["folder-button"]} ${selectedFolder === folder ? styles["selected"] : ""}`}
+                            className={`${styles.folder} ${selectedFolder === folder ? styles.active : ""}`}
                             onClick={() => setSelectedFolder(folder)}
                             onContextMenu={(e) => handleContextMenu(e, folder)}
                         >
                             {folder}
-                        </button>
+                        </div>
                     ))}
-                </div>
-                <div className={styles["folder-controls"]}>
-                    <Add setNotification={setNotification} secrets={secrets} setSecrets={setSecrets} selectedFolder={selectedFolder} />
-                    <div className={styles["new-folder-compact"]}>
-                        <input
-                            type="text"
-                            className={styles["folder-input"]}
-                            placeholder="New Folder"
-                            value={newFolder}
-                            onChange={(e) => setNewFolder(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && addFolder()}
-                        />
-                        <button onClick={addFolder}>+</button>
-                    </div>
                 </div>
             </div>
 
@@ -205,6 +192,6 @@ export default function Manager({ setShowPassword }: ManagerProps) {
                     </>
                 )}
             </div>
-        </div>
+        </div >
     );
 }

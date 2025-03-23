@@ -29,6 +29,7 @@ interface MenuPosition {
 export default function Secret({ secret, secrets, setSecrets, folders }: SecretProps) {
     const [otp, setOtp] = useState('...');
     const [progress, setProgress] = useState(50);
+    const [currentSecond, setCurrentSecond] = useState(30);
     const [notification, setNotification] = useState<NotificationState | null>(null);
     const [contextMenu, setContextMenu] = useState<MenuPosition | null>(null);
 
@@ -39,10 +40,14 @@ export default function Secret({ secret, secrets, setSecrets, folders }: SecretP
 
     const updateProgress = () => {
         const epoch = Math.floor(Date.now() / 1000);
-        const currentProgress = ((epoch % 30) / 30) * 100;
-        setProgress(100 - currentProgress);
+        const elapsedSeconds = epoch % 30;
 
-        if (currentProgress === 0) {
+        const progressValue = (elapsedSeconds / 30) * 100;
+
+        setProgress(100 - progressValue);
+        setCurrentSecond(30 - elapsedSeconds);
+
+        if (elapsedSeconds === 0) {
             updateOTP();
         }
     };
@@ -66,32 +71,6 @@ export default function Secret({ secret, secrets, setSecrets, folders }: SecretP
                 type: 'error'
             });
         }
-    };
-
-    const deleteSecret = async () => {
-        const newSecrets = secrets.filter(s => s.name !== secret.name);
-        try {
-            await storage.save(newSecrets);
-            setSecrets(newSecrets);
-            setNotification({
-                message: 'Secret deleted successfully',
-                type: 'success'
-            });
-        } catch (error) {
-            setNotification({
-                message: 'Failed to delete secret: ' + (error instanceof Error ? error.message : String(error)),
-                type: 'error'
-            });
-        }
-    };
-
-    const handleContextMenu = (e: React.MouseEvent) => {
-        e.preventDefault();
-        // Close any existing context menu
-        const event = new CustomEvent('closeSecretContextMenu');
-        document.dispatchEvent(event);
-        // Open new context menu
-        setContextMenu({ x: e.clientX, y: e.clientY });
     };
 
     const moveToFolder = async (targetFolder: string) => {
@@ -123,19 +102,30 @@ export default function Secret({ secret, secrets, setSecrets, folders }: SecretP
                     onClose={() => setNotification(null)}
                 />
             )}
-            <div
-                className={styles["secret-item"]}
-                style={{
-                    background: `linear-gradient(to left, #12121c ${progress}%, #212133 ${progress}%)`
-                }}
-                onContextMenu={handleContextMenu}
-            >
-                <span className={styles["secret-name"]}>{secret.name}</span>
-                <span className={styles["otp-code"]} onClick={copyKey}>{otp === "..." ? otp : otp.slice(0, 3) + " " + otp.slice(3)}</span>
-                <div className={styles["button-container"]}>
-                    <button className={styles["delete-button"]} onClick={deleteSecret}>
-                        Delete
-                    </button>
+            <div className={styles["totp-card"]}>
+                <span className={styles["totp-name"]}>{secret.name}</span>
+                <span className={styles["totp-code"]} onClick={copyKey}>{otp === "..." ? otp : otp.slice(0, 3) + " " + otp.slice(3)}</span>
+                <div className={styles["totp-meta"]}>
+                    <span className={styles["totp-folder"]}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <path d="M3 6h5l2 2h9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+                        </svg> PERSONAL</span>
+                    <div className={styles["totp-timer"]}>
+                        <span>{currentSecond}s</span>
+                        <div className={styles["timer-bar"]}>
+                            <div className={styles["timer-progress"]} style={{ width: progress + "%" }}></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -151,3 +141,29 @@ export default function Secret({ secret, secrets, setSecrets, folders }: SecretP
         </>
     );
 }
+
+// const deleteSecret = async () => {
+//     const newSecrets = secrets.filter(s => s.name !== secret.name);
+//     try {
+//         await storage.save(newSecrets);
+//         setSecrets(newSecrets);
+//         setNotification({
+//             message: 'Secret deleted successfully',
+//             type: 'success'
+//         });
+//     } catch (error) {
+//         setNotification({
+//             message: 'Failed to delete secret: ' + (error instanceof Error ? error.message : String(error)),
+//             type: 'error'
+//         });
+//     }
+// };
+
+// const handleContextMenu = (e: React.MouseEvent) => {
+//     e.preventDefault();
+//     // Close any existing context menu
+//     const event = new CustomEvent('closeSecretContextMenu');
+//     document.dispatchEvent(event);
+//     // Open new context menu
+//     setContextMenu({ x: e.clientX, y: e.clientY });
+// };
