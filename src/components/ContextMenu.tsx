@@ -34,8 +34,8 @@ export default function ContextMenu({ position, onClose, onDelete }: ContextMenu
     };
 
     return (
-        <div 
-            className={styles.menu} 
+        <div
+            className={styles.menu}
             style={{ top: position.y, left: position.x }}
             onClick={e => e.stopPropagation()}
         >

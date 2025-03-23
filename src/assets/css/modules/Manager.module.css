@@ -1,11 +1,11 @@
 .container {
     min-height: 100vh;
     width: 100%;
-    background: linear-gradient(135deg, #1a1b26 0%, #24283b 100%);
+    max-width: 1400px;
+    background: #121212;
     display: flex;
     flex-direction: column;
     padding: clamp(0.1rem, 3vw, 2rem);
-    gap: clamp(0.5rem, 3vw, 2rem);
 }
 
 .logout-container {
@@ -70,7 +70,6 @@
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
     justify-content: center;
     gap: 1rem;
-    padding: 1rem;
     overflow-y: auto;
     width: 100%;
     max-width: 1400px;
@@ -163,14 +162,10 @@ select.input option {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1rem;
-    background: linear-gradient(145deg, #2B2B3E, #1E1E2D);
+    padding: .25rem;
+    background: #27272A;
     backdrop-filter: blur(10px);
-    border-radius: 15px;
-    border: 1px solid #414868;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     width: min(100%, 1400px);
-    margin: 0 auto 0 auto;
 }
 
 .folders-list {
@@ -178,7 +173,6 @@ select.input option {
     align-items: center;
     gap: 0.5rem;
     overflow-x: auto;
-    padding-bottom: 4px;
     white-space: nowrap;
     scrollbar-width: thin;
     scrollbar-color: #414868 transparent;
@@ -188,6 +182,11 @@ select.input option {
 
     -webkit-mask: var(--mask);
     mask: var(--mask);
+}
+
+h2 {
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .folders-list::-webkit-scrollbar {
@@ -211,22 +210,18 @@ select.input option {
     border: none;
     padding: 0.5rem 1rem;
     border: none;
-    border-radius: 20px;
-    color: white;
+    color: #9797A1;
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    background: #1A1b26;
+    background: transparent;
 }
 
-.folder-button:hover {
-    background: rgba(26, 27, 38, 0.6);
-}
 
 .folder-button.selected {
-    background: linear-gradient(45deg, #5352ed, #3742fa);
-    box-shadow: 0 4px 15px rgba(55, 66, 250, 0.3);
+    background: #09090B;
+    color: white;
 }
 
 .new-folder-compact {
